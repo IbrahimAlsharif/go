@@ -42,7 +42,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/yourusername/your-repository</url>
+            <url>https://maven.pkg.github.com/IbrahimAlsharif/go</url>
         </repository>
     </distributionManagement>
 
