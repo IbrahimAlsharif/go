@@ -26,65 +26,128 @@ public class Go {
     private static WebDriver webDriver;
     private static JavascriptExecutor javascriptExecutor;
     private static WebDriverWait wait;
+
+    /**
+     initialize Go by passing the required parameters
+     @param driver WebDriver object
+     @param js the JavascriptExecutor object
+     @param webdriverWait the WebDriverWait object
+     */
     public static void initialize(WebDriver driver, JavascriptExecutor js, WebDriverWait webdriverWait){
         webDriver = driver;
         javascriptExecutor = js;
         wait = webdriverWait;
     }
-    public static void click(WebElement element) {
+
+    /**
+     * Clicks the target element using Actions
+     * @param element the target element
+     */
+    public static void actionClick(WebElement element) {
         {
             new Actions(webDriver).click(element).perform();
         }
     }
 
-
-    public static void doubleClick(WebDriver driver, WebElement element) {
+    /**
+     * Double-click the target element using Actions
+     * @param element the target element
+     */
+    public static void doubleClick(WebElement element) {
         {
-            new Actions(driver).doubleClick(element).perform();
+            new Actions(webDriver).doubleClick(element).perform();
         }
     }
 
+    /**
+     * Moves to the target element and click using Actions
+     * @param element the target element
+     */
     public static void moveAndClick(WebElement element) {
         {
             new Actions(webDriver).moveToElement(element).click().perform();
         }
     }
 
+    /**
+     * Moves to the target element
+     * @param element the target element
+     */
     public static void moveToElement(WebElement element) {
         {
             new Actions(webDriver).moveToElement(element);
         }
     }
 
-    public static void moveAndClickAndHold(WebDriver driver, WebElement element) {
+    /**
+     * Moves to the target element, then click and hold
+     * @param element the target element
+     */
+    public static void moveAndClickAndHold(WebElement element) {
         {
-            new Actions(driver).moveToElement(element).clickAndHold().perform();
+            new Actions(webDriver).moveToElement(element).clickAndHold().perform();
         }
     }
 
+    /**
+     * Clicks and hold the target element
+     * @param element the target element
+     */
+    public static void clickAndHold(WebElement element) {
+        {
+            new Actions(webDriver).moveToElement(element).clickAndHold().perform();
+        }
+    }
+
+    /**
+     * @return the system user directory based on the current OS
+     */
     public static String getProperty() {
         return location = System.getProperty("user.dir");
     }
 
-    public static Object javascriptExecutor(String s, WebElement usedProductAllMenuItem) {
-        return javascriptExecutor.executeScript(s, usedProductAllMenuItem);
+    /**
+     *
+     * @param javaScript script to execute
+     * @param element element to execute script on it
+     * @return Object
+     */
+    public static Object javascriptExecutor(String javaScript, WebElement element) {
+        return javascriptExecutor.executeScript(javaScript, element);
     }
+
+    /**
+     * Scolls down by value of pixels
+     * @param value pixels
+     */
     public static void scrollDownBy(int value) {
         JavascriptExecutor jse = (JavascriptExecutor) webDriver;
         String scrollStatement = "window.scrollBy(0," + value + ")";
         jse.executeScript(scrollStatement);
     }
 
+    /**
+     * Scrolls up by value of pixels
+     * @param value pixels
+     */
     public static void scrollUpBy(int value) {
         JavascriptExecutor jse = (JavascriptExecutor) webDriver;
         jse.executeScript("window.scrollBy(0," + (-1 * value) + ")");
     }
 
+    /**
+     * Scrolls right by value of pixels
+     * @param value pixels
+     */
     public static void scrollRight(int value) {
         JavascriptExecutor jse = (JavascriptExecutor) webDriver;
         jse.executeScript("window.scrollBy("+value+",0)");
     }
 
+    /**
+     * Switches to browser tab by index number starting from 0
+     * @param index order of the tab starting from 0
+     */
     public static void switchToTabByIndex(int index) {
         currentTab = webDriver.getWindowHandle();
         String targetTab=currentTab;
@@ -96,23 +159,39 @@ public class Go {
         webDriver.switchTo().window(targetTab);
     }
 
+    /**
+     * Switches back to the original tab
+     */
     public static void switchBackToTab() {
         webDriver.close();
         webDriver.switchTo().window(currentTab);
     }
 
+    /**
+     * Switches back to the window of the original tab
+     */
     public static void switchBackToTabWithoutCloseTab() {
         webDriver.switchTo().window(currentTab);
     }
 
+    /**
+     * Refreshes the current page
+     */
     public static void refreshPage() {
         webDriver.navigate().refresh();
     }
 
+    /**
+     * Accepts the active alert
+     */
     public static void alertAccept() {
         webDriver.switchTo().alert().accept();
     }
 
+    /**
+     * Scrolls to the target element
+     * @param element the target element
+     */
     public void scrollToElement(WebElement element) {
         Coordinates coordinate = ((Locatable) element)
                 .getCoordinates();
@@ -120,18 +199,28 @@ public class Go {
         coordinate.inViewPort();
     }
 
+    /**
+     * Scrolls down to the target element
+     * @param element the target element
+     */
     public static void scrollDownToElement(WebElement element) {
         javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
-//method to highlight
-
+    /**
+     * Scrolls up by 150 pixels until reaching the target element
+     * @param element the target element
+     */
     public static void scrollUpUntilReachElement(WebElement element) {
         while (!element.isDisplayed()) {
             scrollUpBy(150);
         }
     }
 
+    /**
+     * Highlights the target element
+     * @param element the target element
+     */
     public static void highlightElement(WebElement element) {
         for (int i = 0; i < 4; i++) {
             javascriptExecutor.executeScript("arguments[0].setAttribute('style', arguments[1]);",
@@ -149,28 +238,56 @@ public class Go {
         return webDriver.switchTo().activeElement();
     }
 
+    /**
+     * Waits until the target element becomes accessible
+     * @param locator locator of the target element
+     * @throws TimeoutException throws exception when not accessible after a time which set in your WebDriver configuration
+     */
     public static void waitForElementToBeAccessibleBy(By locator)  throws TimeoutException{
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
+    /**
+     * Waits until the target element becomes visible
+     * @param locator locator of the target element
+     * @throws TimeoutException throws exception when not visible after a time which set in your WebDriver configuration
+     */
     public static void waitForElementToBeVisibleBy(By locator) throws TimeoutException{
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+    /**
+     * Waits until the target element beceoms visible
+     * @param element locator of the target element
+     * @throws TimeoutException throws exception when not invisible after a time which set in your WebDriver configuration
+     */
     public static void waitForElementToBeInVisibleBy(WebElement element)  throws TimeoutException{
         wait.until(ExpectedConditions.invisibilityOf(element));
     }
 
+    /**
+     * Waits until the target element becomes clickable
+     * @param locator locator of the target element
+     * @throws TimeoutException throws exception when not clickable after a time which set in your WebDriver configuration
+     */
     public static void waitForElementToBeClickableBy(By locator)  throws TimeoutException{
         wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
-
+    /**
+     * Waits until the target element becomes clickable
+     * @param element locator of the target element
+     * @throws TimeoutException throws exception when not clickable after a time which set in your WebDriver configuration
+     */
     public static void waitForElementToBeClickable(WebElement element)  throws TimeoutException{
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-
+    /**
+     * Selects item from the dropdown by text
+     * @param dropDownMenu the dropdown web element
+     * @param text text of the target item
+     */
     public static void selectByText(WebElement dropDownMenu, String text) {
         Select select = new Select(dropDownMenu);
         select.selectByVisibleText(text);
@@ -178,7 +295,7 @@ public class Go {
 
     /**
      * Keep trying click element until other element becomes visible
-     *
+     * used when you struggled to click some elements
      * @param element the target element to click
      * @param locatorToBeVisible locator of the element to be visible
      */
@@ -210,7 +327,7 @@ public class Go {
                         System.out.println("Tries ="+counter);
                         waitForElementToBeVisibleBy(locatorToBeVisible);
                     } catch (Exception exception3){
-                        screenShot("click try "+counter+++"@");
+                        screenShot("click try "+counter+"@");
                         getByXpath(getElementXPath(element),true).click();
                     }
                 }
@@ -218,6 +335,10 @@ public class Go {
         }
     }
 
+    /**
+     * Waits until expected visible element becomes invisible
+     * @param by the locator of the target element
+     */
     public static void waitIfVisible(By by ){
         try{
             waitForElementToBeInVisibleBy(webDriver.findElement(by));}
@@ -225,15 +346,34 @@ public class Go {
             System.out.println("waitIfVisible() -> "+"Element is not visible");
         }
     }
+
+    /**
+     * Snaps a screenshot as a file
+     * @param name the screenshot name to be saved in screenshots folder
+     * @return File
+     */
     public static File screenShot(String name){
         return getShotAsFile(name);
     }
+
+    /**
+     * Clears a text from input
+     * @param element the target element
+     */
     public static void clearText(WebElement element) {
         element.clear();
         element.sendKeys(Keys.CONTROL + "a");
         element.sendKeys(Keys.DELETE);
     }
 
+    /**
+     * Gets the element by its xpath,
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param xpath xpath of the target element
+     * @param isClickable true or false
+     * @return The target web element
+     */
     public static WebElement getByXpath(String xpath, boolean isClickable) {
         By byXpath = By.xpath(xpath);
         waitForElementToBeVisibleBy(byXpath);
@@ -244,6 +384,14 @@ public class Go {
         return webDriver.findElement(byXpath);
     }
 
+    /**
+     * Gets the element by its id,
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param Id id of the target element
+     * @param isClickable true or false
+     * @return The target web element
+     */
     public static WebElement getById(String Id, boolean isClickable) {
         By byId = By.id(Id);
         waitForElementToBeVisibleBy(byId);
@@ -252,6 +400,15 @@ public class Go {
         }
         return webDriver.findElement(byId);
     }
+
+    /**
+     * Gets the element by its className,
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param className Class name of the target element
+     * @param isClickable true or false
+     * @return The target web element
+     */
 
     public static WebElement getByClassName(String className, boolean isClickable) {
         By byClassName = By.className(className);
@@ -262,6 +419,14 @@ public class Go {
         return webDriver.findElement(byClassName);
     }
 
+    /**
+     * Gets the element by its cssSelector,
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param cssSelector of the target element
+     * @param isClickable true or false
+     * @return The target web element
+     */
     public static WebElement getByCssSelector(String cssSelector, boolean isClickable) {
         By byCssSelector = By.cssSelector(cssSelector);
         waitForElementToBeVisibleBy(byCssSelector);
@@ -271,6 +436,15 @@ public class Go {
         return webDriver.findElement(byCssSelector);
     }
 
+    /**
+     * Gets element by tagName, which the target element located ABOVE the referenced web element
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param tagName tag name of the target element
+     * @param element the reference element
+     * @param isClickable true or false
+     * @return The target web element
+     */
     public static WebElement getByAboveElement(String tagName, WebElement element, boolean isClickable) {
         By relativeLocator = RelativeLocator.with(By.tagName(tagName)).below(element);
         waitForElementToBeVisibleBy(relativeLocator);
@@ -281,8 +455,17 @@ public class Go {
         return webDriver.findElement(relativeLocator);
     }
 
-    public static WebElement getByBelowElement(String targetTag, WebElement element, boolean isClickable) {
-        By relativeLocator = RelativeLocator.with(By.tagName(targetTag)).above(element);
+    /**
+     * Gets element by tagName, which the target element located BELOW the referenced web element
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param tagName tag name of the target element
+     * @param element the reference element
+     * @param isClickable true or false
+     * @return The target web element
+     */
+    public static WebElement getByBelowElement(String tagName, WebElement element, boolean isClickable) {
+        By relativeLocator = RelativeLocator.with(By.tagName(tagName)).above(element);
         waitForElementToBeVisibleBy(relativeLocator);
         waitForElementToBeAccessibleBy(relativeLocator);
         if (isClickable) {
@@ -291,12 +474,25 @@ public class Go {
         return webDriver.findElement(relativeLocator);
     }
 
+    /**
+     * Gets the current month on the form MMyy
+     * @return Date as a string
+     */
     public static String getCurrentDate() {
         java.sql.Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMyy");
         return (simpleDateFormat.format(date));
     }
 
+    /**
+     * Gets element by tagName, which the target element located RIGHT to the referenced web element
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param tagName tag name of the target element
+     * @param element the reference element
+     * @param isClickable true or false
+     * @return The target web element
+     */
     public static WebElement getByRightElement(String tagName, WebElement element, boolean isClickable) {
         By relativeLocator = RelativeLocator.with(By.tagName(tagName)).toLeftOf(element);
         waitForElementToBeVisibleBy(relativeLocator);
@@ -307,6 +503,15 @@ public class Go {
         return webDriver.findElement(relativeLocator);
     }
 
+    /**
+     * Gets element by tagName, which the target element located LEFT to the referenced web element
+     * Waits for element to be visible and accessible
+     * Waits for element to be clickable if isClickable is true
+     * @param tagName tag name of the target element
+     * @param element the reference element
+     * @param isClickable true or false
+     * @return The target web element
+     */
     public static WebElement getByLeftElement(String tagName, WebElement element, boolean isClickable) {
         By relativeLocator = RelativeLocator.with(By.tagName(tagName)).toRightOf(element);
         waitForElementToBeVisibleBy(relativeLocator);
@@ -316,15 +521,28 @@ public class Go {
         }
         return webDriver.findElement(relativeLocator);
     }
+
+    /**
+     * Pasts text into input
+     * @param element the target element to past text to it
+     */
     public static void paste(WebElement element){
         Actions a = new Actions(webDriver);
         a.keyDown(element,Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).perform();
     }
 
+    /**
+     * Navigates back
+     */
     public static void back() {
         webDriver.navigate().back();
     }
 
+    /**
+     * Waits for window for timeout milliseconds
+     * @param timeout number od milliseconds to wait
+     * @return Strint
+     */
     public static String waitForWindow(int timeout) {
         try {
             Thread.sleep(timeout);
@@ -351,26 +569,36 @@ public class Go {
                 break;
             }
         }
-        //Wait for the new tab to finish loading content
-        //wait.until(titleIs("XXX"));
     }
 
     public static void getWindowHandles() {
         vars.put("window_handles", webDriver.getWindowHandles());
     }
 
+    /**
+     * Switch to window by tag
+     * @param tag the tag you set before using setWindowTag(tag)
+     */
     public static void switchToWindowByTag(String tag) {
         vars.put(tag, waitForWindow(2000));
         setWindowTag("root");
         webDriver.switchTo().window(vars.get(tag).toString());
     }
 
+    /**
+     * Set a tag for the current window
+     * @param tag of the target window
+     */
     public static void setWindowTag(String tag) {
         vars.put(tag, webDriver.getWindowHandle());
     }
 
-    public static void switchToFrame(String frame) {
-        webDriver.switchTo().frame(webDriver.findElement(By.tagName(frame)));
+    /**
+     * Switches to iFrame by tag name
+     * @param tagName of the target iFrame
+     */
+    public static void switchToFrame(String tagName) {
+        webDriver.switchTo().frame(webDriver.findElement(By.tagName(tagName)));
     }
 
 
@@ -378,21 +606,43 @@ public class Go {
         webDriver.switchTo().frame(index);
     }
 
+    /**
+     * Switches for iFrame by its xpath
+     * @param xPath of the target element
+     */
     public static void switchToFrameByXpath(String xPath) {
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt((By.xpath(xPath))));
     }
 
+    /**
+     * Switches to the default page content (iFrame)
+     */
     public static void switchBackToMainFrame() {
         webDriver.switchTo().defaultContent();
     }
 
+    /**
+     * Opens page Url
+     * @param url the target url
+     */
     public static void openUrl(String url) {
         webDriver.get(url);
     }
+
+    /**
+     * Gets all children of target element by its xpath
+     * @param xpath of the target element
+     * @return List<WebElement>
+     */
     public static List<WebElement> getAllChildrenByXpath(String xpath){
         return Go.getByXpath(xpath,false).findElements(By.xpath("./child::*"));
     }
 
+    /**
+     * Gets full xpath of the target element
+     * @param element the target element
+     * @return String
+     */
     public static String getElementXPath(WebElement element) {
         return (String) ((JavascriptExecutor) webDriver).executeScript(
                 "function getXPath(elt){" +
@@ -415,6 +665,11 @@ public class Go {
                         "return getXPath(arguments[0]).toLowerCase();", element);
     }
 
+    /**
+     * Gets screenshot as a file
+     * @param shotName name of the image file
+     * @return File
+     */
     public static File getShotAsFile(String shotName) {
         final String folder ="screenshots/";
         File scrFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
@@ -428,6 +683,10 @@ public class Go {
         return shot;
     }
 
+    /**
+     * Gets a screenshot as based64 format
+     * @return String
+     */
     public static String getShotAsBase64() {
         return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BASE64);
     }
